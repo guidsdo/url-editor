@@ -1,0 +1,8 @@
+---
+alwaysApply: false
+---
+# React Styling Rules
+
+- Use styled-components instead of inline styling or (S)CSS. Use parameters for style variants.
+- Inline styles can be used for dynamic styling where general styling would influence performance (e.g., coordinates).
+- Place styled components definitions below the React component they style.

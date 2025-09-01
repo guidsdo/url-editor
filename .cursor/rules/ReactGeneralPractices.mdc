@@ -1,0 +1,16 @@
+---
+alwaysApply: false
+---
+
+# React General Practices
+
+- Work in a structured manner, but don't suggest reformatting changes since ESLint can handle that.
+- Use functional components over class components.
+- Ensure all hooks follow the rules of hooks (e.g., call them at the top level).
+- List all dependencies in useEffect, useCallback, etc., to avoid bugs.
+- Use TypeScript for type safety: prefer type aliases over interfaces for defining props and state. Use interfaces only for classes.
+- Optimize performance by using React.memo and useMemo where appropriate to prevent unnecessary re-renders.
+- Always provide a unique 'key' prop when rendering lists.
+- Handle loading, error, and empty states in components.
+- Follow accessibility best practices (e.g., semantic HTML, ARIA attributes).
+- Avoid mutating state directly; use immutable updates.

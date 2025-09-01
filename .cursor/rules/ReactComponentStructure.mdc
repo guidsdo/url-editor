@@ -1,0 +1,9 @@
+---
+alwaysApply: false
+---
+
+# React Component Structure Rules
+
+- Only one exported React component per file.
+- Put fairly big React components in separate files.
+- No async functions or effects directly in React components.

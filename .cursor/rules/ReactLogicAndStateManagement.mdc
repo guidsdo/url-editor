@@ -1,0 +1,7 @@
+---
+alwaysApply: false
+---
+
+# React Logic and State Management Rules
+
+- Logic (like data retrieval or wider state management) should live in a Store class.
