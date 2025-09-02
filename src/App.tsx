@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import { URLParameterEditor } from "./URLParameterEditor";
+import { ParametersTable } from "./ParametersTable";
 
 export const App = observer(() => {
     return (
@@ -10,6 +11,7 @@ export const App = observer(() => {
                 <Subtitle>Edit URLs and manage query parameters with ease</Subtitle>
             </Header>
             <URLParameterEditor />
+            <ParametersTable />
         </Container>
     );
 });
@@ -17,7 +19,10 @@ export const App = observer(() => {
 const Container = styled.div`
     min-height: 100vh;
     background-color: #f5f5f5;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
 `;
 
 const Header = styled.header`

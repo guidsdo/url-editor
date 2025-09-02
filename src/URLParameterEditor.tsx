@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import { useContextOrThrow } from "./helpers/reactHelpers";
@@ -43,6 +43,13 @@ export const URLParameterEditor = observer(() => {
 
         setIsEditing(false);
     };
+
+    useEffect(() => {
+        if (!isEditing) {
+            setLocalUrl(urlEditorStore.url);
+            setLocalParts(parseUrl(urlEditorStore.url)?.parts ?? []);
+        }
+    }, [urlEditorStore.url]);
 
     return (
         <EditorContainer>

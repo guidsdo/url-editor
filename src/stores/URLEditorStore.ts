@@ -1,4 +1,4 @@
-import { computed, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 import { createContext } from "react";
 
 export const UrlEditorStoreContext = createContext<URLEditorStore | null>(null);
@@ -10,5 +10,12 @@ export class URLEditorStore {
 
     @computed get parameters(): [key: string, value: string][] {
         return Array.from(new URL(this.url).searchParams);
+    }
+
+    @action
+    setParameterValue(key: string, value: string) {
+        const url = new URL(this.url);
+        url.searchParams.set(key, value);
+        this.url = url.toString();
     }
 }

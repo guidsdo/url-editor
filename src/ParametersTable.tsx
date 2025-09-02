@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { useContextOrThrow } from "./helpers/reactHelpers";
 import { UrlEditorStoreContext } from "./stores/URLEditorStore";
+import { observer } from "mobx-react-lite";
+import React, { useCallback } from "react";
 
-export const ParametersTable = () => {
+export const ParametersTable = observer(() => {
     const urlEditorStore = useContextOrThrow(UrlEditorStoreContext);
     const parameters = urlEditorStore.parameters;
 
@@ -20,14 +22,7 @@ export const ParametersTable = () => {
                     </thead>
                     <tbody>
                         {parameters.map(([key, value], index) => (
-                            <TableRow key={`${key}-${index}`}>
-                                <TableCell>
-                                    <ParameterKeySpan>{key}</ParameterKeySpan>
-                                </TableCell>
-                                <TableCell>
-                                    <ParameterValueSpan>{value}</ParameterValueSpan>
-                                </TableCell>
-                            </TableRow>
+                            <ParameterTableRow key={`${key}-${index}`} value={value} paramKey={key} />
                         ))}
                     </tbody>
                 </ParameterTable>
@@ -36,7 +31,30 @@ export const ParametersTable = () => {
             )}
         </TableContainer>
     );
-};
+});
+
+const ParameterTableRow = observer(({ paramKey, value }: { value: string; paramKey: string }) => {
+    const urlEditorStore = useContextOrThrow(UrlEditorStoreContext);
+
+    const handleBlur = useCallback(
+        (e: React.FocusEvent<HTMLSpanElement>) => {
+            const value = e.target.textContent;
+            urlEditorStore.setParameterValue(paramKey, value);
+        },
+        [urlEditorStore]
+    );
+
+    return (
+        <TableRow>
+            <TableCell>
+                <ParameterKeySpan>{paramKey}</ParameterKeySpan>
+            </TableCell>
+            <TableCell>
+                <ParameterValueSpan contentEditable suppressContentEditableWarning={true} onBlur={handleBlur} children={value} />
+            </TableCell>
+        </TableRow>
+    );
+});
 
 const TableContainer = styled.div`
     margin-top: 20px;
