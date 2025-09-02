@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
-import { URLParameterEditor } from "./URLParameterEditor";
-import { ParametersTable } from "./ParametersTable";
+import { URLParameterEditor } from "./components/URLParameterEditor";
+import { ParametersTable } from "./components/ParametersTable";
 
 export const App = observer(() => {
     return (

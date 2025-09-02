@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
-import { useContextOrThrow } from "./helpers/reactHelpers";
-import { UrlEditorStoreContext } from "./stores/URLEditorStore";
-import { parseUrl, UrlPart } from "./helpers/urlHelpers";
+import { useContextOrThrow } from "../helpers/reactHelpers";
+import { UrlEditorStoreContext } from "../stores/URLEditorStore";
+import { parseUrl, UrlPart } from "../helpers/urlHelpers";
 
 export const URLParameterEditor = observer(() => {
     const editorRef = useRef<HTMLDivElement>(null);

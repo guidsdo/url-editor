@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { useContextOrThrow } from "./helpers/reactHelpers";
-import { UrlEditorStoreContext } from "./stores/URLEditorStore";
+import { useContextOrThrow } from "../helpers/reactHelpers";
+import { UrlEditorStoreContext } from "../stores/URLEditorStore";
 import { observer } from "mobx-react-lite";
 import React, { useCallback } from "react";
 
