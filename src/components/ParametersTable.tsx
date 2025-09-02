@@ -6,22 +6,21 @@ import React, { useCallback } from "react";
 
 export const ParametersTable = observer(() => {
     const urlEditorStore = useContextOrThrow(UrlEditorStoreContext);
-    const parameters = urlEditorStore.parameters;
+    const parameters = urlEditorStore.cachedParameters;
 
     return (
         <TableContainer>
             <Title>Parameter Overview</Title>
-            {parameters.length > 0 ? (
+            {parameters.size > 0 ? (
                 <ParameterTable>
                     <thead>
                         <tr>
                             <TableHeader>Parameter</TableHeader>
                             <TableHeader>Value</TableHeader>
-                            <TableHeader>Status</TableHeader>
                         </tr>
                     </thead>
                     <tbody>
-                        {parameters.map(([key, value], index) => (
+                        {[...parameters].map(([key, value], index) => (
                             <ParameterTableRow key={`${key}-${index}`} value={value} paramKey={key} />
                         ))}
                     </tbody>

@@ -6,21 +6,41 @@ import { UrlEditorStoreContext } from "../stores/URLEditorStore";
 import { parseUrl, UrlPart } from "../helpers/urlHelpers";
 
 export const URLParameterEditor = observer(() => {
-    const editorRef = useRef<HTMLDivElement>(null);
-    const [isEditing, setIsEditing] = useState(false);
     const urlEditorStore = useContextOrThrow(UrlEditorStoreContext);
+
+    const editorRef = useRef<HTMLDivElement>(null);
+
+    const [isEditing, setIsEditing] = useState(false);
+
     const [localUrl, setLocalUrl] = useState<string>(urlEditorStore.url);
     const [localParts, setLocalParts] = useState<UrlPart[]>(parseUrl(localUrl)?.parts ?? []);
 
-    const handleSpecialKeys = useCallback((e: React.KeyboardEvent<HTMLDivElement>): boolean => {
-        if (e.ctrlKey && e.key === " ") {
-            e.preventDefault();
-            console.log("ctrl + space");
-            return true;
-        }
+    const [suggestionInput, setSuggestionInput] = useState<string | null>(null);
 
-        return false;
-    }, []);
+    const handleAutocomplete = useCallback(() => {
+        // Check if there is a selection
+        if (!window.getSelection()?.rangeCount) return;
+
+        const caretPosition = window.getSelection()?.getRangeAt(0)?.startOffset;
+        if (!caretPosition) return;
+
+        const stringUntilCaret = editorRef.current?.textContent?.substring(0, caretPosition);
+        if (!stringUntilCaret) return;
+
+        setSuggestionInput(stringUntilCaret.split(/&|\?/).at(-1) ?? null);
+    }, [setSuggestionInput]);
+
+    const handleSpecialKeys = useCallback(
+        (e: React.KeyboardEvent<HTMLDivElement>): void => {
+            if ((e.ctrlKey || e.metaKey) && e.key === " ") {
+                e.preventDefault();
+
+                handleAutocomplete();
+                return;
+            }
+        },
+        [handleAutocomplete]
+    );
 
     const handleFocus = useCallback(
         (_e: React.FocusEvent<HTMLDivElement>) => {
@@ -33,11 +53,13 @@ export const URLParameterEditor = observer(() => {
         const url = editorRef.current?.textContent ?? "";
         setLocalUrl(url);
 
+        setSuggestionInput(null);
+
         if (url.trim()) {
             const parsedUrl = parseUrl(url);
             if (parsedUrl) {
                 setLocalParts(parsedUrl.parts);
-                urlEditorStore.url = parsedUrl.normalisedUrl;
+                urlEditorStore.setUrl(parsedUrl.normalisedUrl);
             }
         }
 
@@ -74,9 +96,35 @@ export const URLParameterEditor = observer(() => {
                           )
                       )}
             </URLEditor>
+            {suggestionInput && (
+                <AutoCompleteDropdown>
+                    {[...urlEditorStore.cachedParameters.keys()].map(suggestion => (
+                        <AutoCompleteItem key={suggestion} onClick={() => {}} $isHighlighted={false}>
+                            {suggestion}
+                        </AutoCompleteItem>
+                    ))}
+                </AutoCompleteDropdown>
+            )}
         </EditorContainer>
     );
 });
+
+const AutoCompleteDropdown = styled.div`
+    margin-top: 5px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+`;
+
+const AutoCompleteItem = styled.div<{ $isHighlighted: boolean }>`
+    padding: 8px 12px;
+    cursor: pointer;
+    background-color: ${props => (props.$isHighlighted ? "#f8f9fa" : "#fff")};
+    border-bottom: 1px solid #eee;
+`;
 
 const EditorContainer = styled.div`
     max-width: 800px;
