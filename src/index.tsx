@@ -1,14 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { App } from './App';
-import { rootStore } from './store';
-import { createContext } from 'react';
+import ReactDOM from "react-dom/client";
+import { App } from "./App";
+import { URLEditorStore, UrlEditorStoreContext } from "./stores/URLEditorStore";
 
-export const RootStoreContext = createContext(rootStore);
+const urlEditorStore = new URLEditorStore();
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-    <RootStoreContext.Provider value={rootStore}>
+    <UrlEditorStoreContext.Provider value={urlEditorStore}>
         <App />
-    </RootStoreContext.Provider>
+    </UrlEditorStoreContext.Provider>
 );
